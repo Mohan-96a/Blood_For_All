@@ -1,6 +1,6 @@
-# LifeLink - Healthcare Donation Platform
+#BlooodForAll - Healthcare Donation Platform
 
-LifeLink is a web-based emergency health and donation management system that connects patients, donors, and hospitals on a single platform. It allows patients to request blood, beds, medicines, and hospital availability, while donors can offer blood and medicine donations. Hospitals manage and respond to these requests, with admin overseeing the entire system.
+BlooodForAll is a web-based emergency health and donation management system that connects patients, donors, and hospitals on a single platform. It allows patients to request blood, beds, medicines, and hospital availability, while donors can offer blood and medicine donations. Hospitals manage and respond to these requests, with admin overseeing the entire system.
 
 
 ## Features
@@ -38,9 +38,7 @@ Let me know if you want a shorter version for the slide or explanation points fo
 
 
 
-## Link to the Website
 
-- https://lifelink-l9n1.onrender.com
 
 
 ## Tech Stack

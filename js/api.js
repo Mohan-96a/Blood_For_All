@@ -31,10 +31,25 @@ const api = {
     }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      data = {};
+    }
 
     if (!response.ok) {
-      throw new Error(data.message || 'API request failed');
+      // Auto-logout on auth failure
+      if (response.status === 401) {
+        localStorage.clear();
+        window.location.href = 'login.html?error=unauthorized';
+      }
+      const msg =
+        data.error ||
+        data.message ||
+        (data.details ? `${data.error || 'Error'}: ${data.details}` : null) ||
+        'API request failed';
+      throw new Error(msg);
     }
 
     return data;

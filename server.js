@@ -7,10 +7,20 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const app = express();
+console.log('Google OAuth config:', {
+    callback: process.env.GOOGLE_CALLBACK_URL,
+    clientIdPrefix: (process.env.GOOGLE_CLIENT_ID || '').slice(0, 12)
+  });
 
 // Middleware
 app.use(cors({
-  origin: ['https://lifelink-l9n1.onrender.com', 'http://localhost:3000', 'http://127.0.0.1:3000'],
+  origin: [
+    'https://lifelink-l9n1.onrender.com',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3001'
+  ],
   credentials: true
 }));
 
@@ -31,7 +41,9 @@ app.use((req, res, next) => {
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'https://lifelink-l9n1.onrender.com/api/users/auth/google/callback',
+    callbackURL: process.env.GOOGLE_CALLBACK_URL || (process.env.NODE_ENV === 'production'
+        ? 'https://lifelink-l9n1.onrender.com/api/users/auth/google/callback'
+        : 'http://localhost:3000/api/users/auth/google/callback'),
     scope: ['profile', 'email']
 }, async (accessToken, refreshToken, profile, done) => {
     try {

@@ -280,6 +280,13 @@
             setTimeout(() => updateStatistics(), 200);
         }
 
+        function getCurrentUser() {
+            try {
+                const s = localStorage.getItem('user') || localStorage.getItem('lifelink_user');
+                return s ? JSON.parse(s) : null;
+            } catch { return null; }
+        }
+
         async function loadPatientRequests() {
             try {
                 const result = await api.request('/requests');
@@ -290,7 +297,13 @@
                     // Filter to show only truly available requests:
                     // 1. Status must be 'pending' (not approved by any hospital)
                     // 2. Not rejected by current hospital
-                    const currentHospitalId = JSON.parse(localStorage.getItem('user'))._id;
+                    const user = getCurrentUser();
+                    const currentHospitalId = user && user._id;
+                    if (!currentHospitalId) {
+                        showAlert('Please re-login as hospital.', 'error');
+                        window.location.href = 'login.html';
+                        return;
+                    }
                     const availableRequests = requests.filter(req => {
                         // Only show pending requests
                         if (req.status !== 'pending') return false;
@@ -375,7 +388,13 @@
                     // Filter to show only truly available donations:
                     // 1. Status must be 'pending' (not approved by any hospital)
                     // 2. Not rejected by current hospital
-                    const currentHospitalId = JSON.parse(localStorage.getItem('user'))._id;
+                    const user = getCurrentUser();
+                    const currentHospitalId = user && user._id;
+                    if (!currentHospitalId) {
+                        showAlert('Please re-login as hospital.', 'error');
+                        window.location.href = 'login.html';
+                        return;
+                    }
                     const availableDonations = donations.filter(don => {
                         // Only show pending donations
                         if (don.status !== 'pending') return false;
